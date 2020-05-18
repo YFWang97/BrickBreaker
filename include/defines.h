@@ -55,5 +55,6 @@ extern SDL_Renderer* gRenderer;
 extern SDL_Texture* ballTexture;
 extern SDL_Texture* paddleTexture;
 extern SDL_Texture* brickTextures[5]; 
+extern SDL_Texture* overTexture;
 
 #endif

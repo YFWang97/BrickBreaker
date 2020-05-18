@@ -8,4 +8,7 @@ Brick::Brick(BrickType brickType_, Coordinate pos)
 
 BrickType Brick::get_brick_type() {return brickType;}
 
-void Brick::set_brick_type(BrickType brickType_) {brickType = brickType_;}
+void Brick::set_brick_type(BrickType brickType_) {
+    brickType = brickType_;
+    set_texture(brickTextures[brickType_]);
+}

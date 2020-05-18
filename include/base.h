@@ -21,6 +21,8 @@ class Base {
          */
 		Base(SDL_Texture* texture_, Coordinate initPos, bool type = 0);
 
+        void set_texture(SDL_Texture* texture_);
+
 		Coordinate get_centre();
 		Bound get_boundary();
 		SDL_Rect get_rect();

@@ -20,6 +20,8 @@ Base::Base(SDL_Texture* texture_, Coordinate initPos, bool type) {
 	}
 }
 
+void Base::set_texture(SDL_Texture* texture_) {texture = texture_;}
+
 Coordinate Base::get_centre() {return centre;}
 
 Bound Base::get_boundary() {return boundary;}

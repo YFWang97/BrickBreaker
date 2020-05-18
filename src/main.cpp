@@ -28,10 +28,22 @@ int main (void) {
 	Ball mainBall;
 
     Brick* brickArr[BRICK_ROW][BRICK_COL];
+    int breakTotal;
+
+    Base over(overTexture, {SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2}, 1);
 
     for (int i = 0; i < BRICK_ROW; i++) {
         for (int j = 0; j < BRICK_COL; j++) {
-            brickArr[i][j] = new Brick(BR_DEFAULT, {BRICK_MARGIN + j * BRICK_WIDTH, BRICK_MARGIN + i * BRICK_HEIGHT});
+            breakTotal++;
+            BrickType type = BR_DEFAULT;
+            srand(SDL_GetTicks() + i*j);
+            if (rand() % 5 == 0) {
+                type = BR_BREAKMULT;
+            } else if (rand() % 8 == 0) {
+                type = BR_UNBREAK;
+                breakTotal--;
+            }
+            brickArr[i][j] = new Brick(type, {BRICK_MARGIN + j * BRICK_WIDTH, BRICK_MARGIN + i * BRICK_HEIGHT});
         }
     }
 
@@ -113,7 +125,7 @@ int main (void) {
 
                         bool collision = check_collision_cir(mainBall.get_centre(), mainBall.get_radius(), brickArr[brickRow][brickCol]->get_boundary(), NULL, &edge);
 
-                        Coordinate brickIndex = {brickRow, brickCol};
+                        Coordinate brickIndex = {brickCol, brickRow};
 
                         if (edge) {
                             if ((row + col) & 0x1) { //Sum is odd
@@ -162,15 +174,30 @@ int main (void) {
                     mainBall.set_speed_y_neg();
                 }
 
+                vector<Coordinate> breakList;
+
                 for (auto& brick: edge_collision) {
-                    delete brickArr[brick.first.x][brick.first.y];
-                    brickArr[brick.first.x][brick.first.y] = NULL;
+                    breakList.push_back(brick.first);
                 }
 
                 if (edge_collision.size() < 2) {
                     for (auto& brick: corner_collision) {
-                        delete brickArr[brick.first.x][brick.first.y];
-                        brickArr[brick.first.x][brick.first.y] = NULL;
+                        breakList.push_back(brick.first);
+                    }
+                }
+
+                for (auto& brick: breakList) {
+                    switch (brickArr[brick.y][brick.x]->get_brick_type()) {
+                        case BR_BREAKMULT:
+                            brickArr[brick.y][brick.x]->set_brick_type(BR_DEFAULT);
+                            break;
+                        case BR_DEFAULT:
+                            delete brickArr[brick.y][brick.x];
+                            brickArr[brick.y][brick.x] = NULL;
+                            breakTotal--;
+                            break;
+                        case BR_UNBREAK:
+                            break;
                     }
                 }
             }
@@ -274,6 +301,10 @@ int main (void) {
 		}
 
 		SDL_RenderClear(gRenderer);
+
+        if (breakTotal == 0) {
+            over.draw();
+        }
 
 		paddle.draw();
 		mainBall.draw();
