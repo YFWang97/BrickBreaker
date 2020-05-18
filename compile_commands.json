@@ -1,0 +1,77 @@
+[
+    {
+        "arguments": [
+            "c++",
+            "-c",
+            "-w",
+            "-Wall",
+            "-O",
+            "-Iinclude/",
+            "-o",
+            "game",
+            "src/helper.cpp"
+        ],
+        "directory": "/home/yangfan/Projects/BrickBreaker",
+        "file": "src/helper.cpp"
+    },
+    {
+        "arguments": [
+            "c++",
+            "-c",
+            "-w",
+            "-Wall",
+            "-O",
+            "-Iinclude/",
+            "-o",
+            "game",
+            "src/base.cpp"
+        ],
+        "directory": "/home/yangfan/Projects/BrickBreaker",
+        "file": "src/base.cpp"
+    },
+    {
+        "arguments": [
+            "c++",
+            "-c",
+            "-w",
+            "-Wall",
+            "-O",
+            "-Iinclude/",
+            "-o",
+            "game",
+            "src/paddle.cpp"
+        ],
+        "directory": "/home/yangfan/Projects/BrickBreaker",
+        "file": "src/paddle.cpp"
+    },
+    {
+        "arguments": [
+            "c++",
+            "-c",
+            "-w",
+            "-Wall",
+            "-O",
+            "-Iinclude/",
+            "-o",
+            "game",
+            "src/main.cpp"
+        ],
+        "directory": "/home/yangfan/Projects/BrickBreaker",
+        "file": "src/main.cpp"
+    },
+    {
+        "arguments": [
+            "c++",
+            "-c",
+            "-w",
+            "-Wall",
+            "-O",
+            "-Iinclude/",
+            "-o",
+            "game",
+            "src/ball.cpp"
+        ],
+        "directory": "/home/yangfan/Projects/BrickBreaker",
+        "file": "src/ball.cpp"
+    }
+]
