@@ -25,6 +25,7 @@ class Ball : public Base {
 		BallRadius radius;
 
 		bool fired;
+        int lives;
 
 	public:
 		Ball();
@@ -57,6 +58,9 @@ class Ball : public Base {
 		void update_pos_w_paddle(Coordinate paddleCentre);
 
 		void fire(int speedX_, int speedY_);
+
+        int get_lives();
+        void set_lives(int lives_);
 };
 
 

@@ -19,6 +19,7 @@ int main (void) {
 	
 	bool clicked = false;
     bool pause = false;
+    bool fallOut = false;
 
     int xLast = 0;
     int xDiff = 0;
@@ -26,27 +27,58 @@ int main (void) {
 	Paddle paddle;
 	Ball mainBall;
 
+    mainBall.set_lives(5);
+
     Brick* brickArr[BRICK_ROW][BRICK_COL];
     int breakTotal;
+
+    vector<Ball> ballIndiVector;
 
     vector<Powerup> powerupVector;
 
     Base over(overTexture, {SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2}, 1);
+    Base levelup(levelupTexture, {SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2}, 1);
     
     srand(SDL_GetTicks());
 
+
+    /* Set up bricks */
     for (int i = 0; i < BRICK_ROW; i++) {
         for (int j = 0; j < BRICK_COL; j++) {
             breakTotal++;
-            BrickType type = BR_DEFAULT;
+            BrickType brType = BR_DEFAULT;
             if (rand() % 5 == 0) {
-                type = BR_BREAKMULT;
+            brType = BR_BREAKMULT;
             } else if (rand() % 8 == 0) {
-                type = BR_UNBREAK;
+                brType = BR_UNBREAK;
                 breakTotal--;
             }
-            brickArr[i][j] = new Brick(type, {BRICK_MARGIN + j * BRICK_WIDTH, BRICK_MARGIN + i * BRICK_HEIGHT});
+
+            brickArr[i][j] = new Brick(brType, {BRICK_MARGIN + j * BRICK_WIDTH, BRICK_MARGIN + i * BRICK_HEIGHT});
         }
+    }
+
+
+    /* Set up Powerup on bricks */
+    for (int i = 0; i < 10; i++) {
+        PowerupType pType = POW_NONE;
+        int randN = rand();
+        if (randN % 3) {
+            pType = POW_LONG;
+        } else if (randN % 5) {
+            pType = POW_SHORT;
+        }
+        brickArr[rand() % BRICK_ROW][rand() % BRICK_COL]->set_powerup_type(pType);
+    }
+
+    
+    /* Set up the ball live indicator */
+    for (int i = 0; i < mainBall.get_lives(); i++) {
+        Ball ball;
+        ball.update_width(ball.get_rect().w / 2);
+        ball.update_height(ball.get_rect().h / 2);
+        ball.update_pos_centre({10 + 30 * i, 780});
+        ballIndiVector.push_back(ball);
     }
 
 
@@ -56,7 +88,7 @@ int main (void) {
 				case SDL_QUIT:
 					quit = true;
 					break;
-				case SDL_MOUSEMOTION:
+				case SDL_MOUSEMOTION: {
 					int x;
 					SDL_GetMouseState(&x, NULL);
 
@@ -70,13 +102,21 @@ int main (void) {
 
 					paddle.update_pos_centre_x(x);
 					mainBall.update_pos_w_paddle(paddle.get_centre());
+
+                    fallOut = false;
 					break;
-				case SDL_MOUSEBUTTONDOWN:
-					clicked = true;
+                }
+                case SDL_MOUSEBUTTONDOWN: {
+                    if (!fallOut) {
+					    clicked = true;
+                    }
 					break;
+                }
 				case SDL_MOUSEBUTTONUP:
-					clicked = false;
-					mainBall.fire(10, -5);
+                    if (clicked) {
+                        clicked = false;
+                        mainBall.fire(10, -5);
+                    }
 					break;
                 case SDL_KEYDOWN:
                     pause = !pause;
@@ -192,12 +232,16 @@ int main (void) {
                     case BR_BREAKMULT:
                         brickArr[brick.y][brick.x]->set_brick_type(BR_DEFAULT);
                         break;
-                    case BR_DEFAULT:
-                        powerupVector.push_back(Powerup(POW_FAST, brickArr[brick.y][brick.x]->get_centre()));
+                    case BR_DEFAULT: {
+                        PowerupType pType = brickArr[brick.y][brick.x]->get_powerup_type();
+                        if (pType >= 0) {
+                            powerupVector.push_back(Powerup(pType, brickArr[brick.y][brick.x]->get_centre()));
+                        }
                         delete brickArr[brick.y][brick.x];
                         brickArr[brick.y][brick.x] = NULL;
                         breakTotal--;
                         break;
+                    }
                     case BR_UNBREAK:
                         break;
                 }
@@ -284,9 +328,14 @@ int main (void) {
 
         /* Bouncing from the Wall Check */
         //The ball falls out of the world, reset everything
-        if (mainBall.get_boundary().top >= SCREEN_HEIGHT - 1) {
+        if (mainBall.get_boundary().top > SCREEN_HEIGHT - 1 && !fallOut) {
             mainBall.reset();
+            fallOut = true;
             //If it fall outs, don't update with the paddle immediately
+            if (ballIndiVector.size() > 0) {
+                ballIndiVector.pop_back();
+            }
+            mainBall.set_lives(mainBall.get_lives() - 1);
         }
 
         if (mainBall.get_boundary().right >= SCREEN_WIDTH - 1 || mainBall.get_boundary().left <= 0) {
@@ -303,8 +352,13 @@ int main (void) {
 
             if (collision) {
                 switch (it->get_powerup_type()) {
-                    case POW_FAST:
-                        mainBall.set_speed(S_FAST);
+                    case POW_LONG:
+                        paddle.update_width(P_LONG);
+                        //mainBall.set_speed(S_FAST);
+                        break;
+
+                    case POW_SHORT:
+                        paddle.update_width(P_SHORT);
                         break;
                 }
 
@@ -327,8 +381,14 @@ int main (void) {
 		mainBall.draw();
 
 
-        if (breakTotal == 0) {
+        if (mainBall.get_lives() == 0) {
+            pause = true;
             over.draw();
+        }
+
+        if (breakTotal == 0) {
+            pause = true;
+            levelup.draw();
         }
 
 		paddle.draw();
@@ -344,6 +404,10 @@ int main (void) {
         for (auto& powerup : powerupVector) {
             powerup.update_pos();
             powerup.draw();
+        }
+
+        for (auto& ball : ballIndiVector) {
+            ball.draw();
         }
 
 		SDL_RenderPresent(gRenderer);

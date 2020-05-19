@@ -70,3 +70,7 @@ void Ball::fire(int speedX_, int speedY_) {
 		speedY = speedY_;
 	}
 }
+
+int Ball::get_lives() {return lives;}
+
+void Ball::set_lives(int lives_) {lives = lives_;}

@@ -97,6 +97,8 @@ void Base::update_width(int width_) {
 	boundary.right = boundary.left + width - 1;
 
 	centre.x = (boundary.right + boundary.left) / 2;
+
+    rect.w = width;
 }
 
 void Base::update_height(int height_) {
@@ -105,6 +107,8 @@ void Base::update_height(int height_) {
 	boundary.bottom = boundary.top + height - 1;
 
 	centre.y = (boundary.bottom + boundary.top) / 2;
+
+    rect.h = height;
 }
 
 void Base::draw() {

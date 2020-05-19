@@ -8,6 +8,7 @@ SDL_Texture* ballTexture;
 SDL_Texture* paddleTexture;
 SDL_Texture* brickTextures[5];
 SDL_Texture* overTexture;
+SDL_Texture* levelupTexture;
 SDL_Texture* powerupTexture[5];
 
 int initialize() {
@@ -63,11 +64,20 @@ int initialize_img() {
     brickTextures[2] = load_img("img/brick2.png");
     if (brickTextures[2] == NULL) {return -1;}
 
-    overTexture = load_img("img/clear.png");
+    overTexture = load_img("img/over.png");
     if (overTexture == NULL) {return -1;}
+
+    levelupTexture = load_img("img/levelup.png");
+    if (levelupTexture == NULL) {return -1;}
 
     powerupTexture[0] = load_img("img/power0.png");
     if (powerupTexture[0] == NULL) {return -1;}
+
+    powerupTexture[1] = load_img("img/power0.png");
+    if (powerupTexture[1] == NULL) {return -1;}
+
+    powerupTexture[2] = load_img("img/power0.png");
+    if (powerupTexture[2] == NULL) {return -1;}
 
     return 0;
 }
