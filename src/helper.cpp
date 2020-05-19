@@ -8,6 +8,7 @@ SDL_Texture* ballTexture;
 SDL_Texture* paddleTexture;
 SDL_Texture* brickTextures[5];
 SDL_Texture* overTexture;
+SDL_Texture* powerupTexture[5];
 
 int initialize() {
 	if(SDL_Init(SDL_INIT_VIDEO) < 0) {
@@ -64,6 +65,9 @@ int initialize_img() {
 
     overTexture = load_img("img/clear.png");
     if (overTexture == NULL) {return -1;}
+
+    powerupTexture[0] = load_img("img/power0.png");
+    if (powerupTexture[0] == NULL) {return -1;}
 
     return 0;
 }

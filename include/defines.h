@@ -56,5 +56,6 @@ extern SDL_Texture* ballTexture;
 extern SDL_Texture* paddleTexture;
 extern SDL_Texture* brickTextures[5]; 
 extern SDL_Texture* overTexture;
+extern SDL_Texture* powerupTexture[5];
 
 #endif

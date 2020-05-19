@@ -12,8 +12,8 @@ enum BallRadius {
 
 enum BallSpeed {
 	S_NORMAL = 8,
-	S_FAST = 10,
-	S_SLOW = 5
+	S_FAST = 16,
+	S_SLOW = 4
 };
 
 class Ball : public Base {
@@ -32,6 +32,9 @@ class Ball : public Base {
 		int get_speed_y();
 		BallSpeed get_speed();
         int get_radius();
+    
+        void set_speed(BallSpeed speed_);
+
 		void set_speed_x(int speedX_);
 		void set_speed_y(int speedY_);
 

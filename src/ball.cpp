@@ -17,6 +17,12 @@ BallSpeed Ball::get_speed() {return speed;}
 
 int Ball::get_radius() {return (int)radius;}
 
+void Ball::set_speed(BallSpeed speed_) {
+    speedX *= (speed_ / speed);
+    speedY *= (speed_ / speed);
+    speed = speed_;
+}
+
 void Ball::set_speed_x(int speedX_) {speedX = speedX_;}
 
 void Ball::set_speed_y(int speedY_) {speedY = speedY_;}
