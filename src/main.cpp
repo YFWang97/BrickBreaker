@@ -28,6 +28,8 @@ int main (void) {
 	Ball mainBall;
 
     mainBall.set_lives(5);
+    mainBall.updateCnt = mainBall.get_speed() / S_SLOW;
+    mainBall.throughBall = false;
 
     Brick* brickArr[BRICK_ROW][BRICK_COL];
     int breakTotal;
@@ -64,9 +66,13 @@ int main (void) {
         PowerupType pType = POW_NONE;
         int randN = rand();
         if (randN % 3) {
+            pType = POW_FAST;
+        } else if (randN % 4) {
             pType = POW_LONG;
         } else if (randN % 5) {
             pType = POW_SHORT;
+        } else if (randN % 7) {
+            pType = POW_THROUGH;
         }
         brickArr[rand() % BRICK_ROW][rand() % BRICK_COL]->set_powerup_type(pType);
     }
@@ -190,11 +196,19 @@ int main (void) {
 
             if (edge_collision.size() > 0) {
                 for (auto& brick: edge_collision) {
-                    effEdge += brick.second;
+                    if (!mainBall.throughBall ||
+                        brickArr[brick.first.y][brick.first.x]->get_brick_type() == BR_UNBREAK) 
+                    {
+                        effEdge += brick.second;
+                    }
                 }
             } else {
                 if (corner_collision.size() > 0) {
-                    effEdge = corner_collision[0].second;
+                    if (!mainBall.throughBall ||
+                        brickArr[corner_collision[0].first.y][corner_collision[0].first.x]->get_brick_type() == BR_UNBREAK)
+                    {
+                        effEdge = corner_collision[0].second;
+                    }
                 }
             }
 
@@ -261,9 +275,8 @@ int main (void) {
                 if (edge & 0x4) {
                     double angle = (1 - abs(ballPaddlePortion)) * 90 * PI / 180; 
 
-                    BallSpeed speed = mainBall.get_speed();
-                    mainBall.set_speed_x((int)(cos(angle) * speed));
-                    mainBall.set_speed_y((int)(sin(angle) * speed));
+                    mainBall.set_speed_x((int)(cos(angle) * S_NORMAL));
+                    mainBall.set_speed_y((int)(sin(angle) * S_NORMAL));
                     
                     if (ballPaddlePortion < 0) {
                         mainBall.set_speed_x_neg();
@@ -352,13 +365,18 @@ int main (void) {
 
             if (collision) {
                 switch (it->get_powerup_type()) {
+                    case POW_FAST:
+                        mainBall.set_speed(S_FAST);
+                        mainBall.updateCnt = S_FAST / S_SLOW;
+                        break;
                     case POW_LONG:
                         paddle.update_width(P_LONG);
-                        //mainBall.set_speed(S_FAST);
                         break;
-
                     case POW_SHORT:
                         paddle.update_width(P_SHORT);
+                        break;
+                    case POW_THROUGH:
+                        mainBall.throughBall = true;
                         break;
                 }
 
@@ -373,11 +391,21 @@ int main (void) {
 
         /* Position Update and Draw */
         
+        mainBall.update_pos();
+        
+        /* Speed Adjustment for Ball */
+        // For faster balls, update / calculate the step but not show it 
+        // This ensures that the ball is not jumping over the bricks
+        if (mainBall.updateCnt > 1) { 
+            mainBall.updateCnt--;
+            continue;
+        } else {
+            mainBall.updateCnt = mainBall.get_speed() / S_SLOW;
+        }
 
 		SDL_RenderClear(gRenderer);
         
         //After setting the speed, update the new position
-        mainBall.update_pos();
 		mainBall.draw();
 
 

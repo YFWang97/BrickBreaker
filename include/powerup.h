@@ -7,7 +7,8 @@ enum PowerupType {
     POW_NONE = -1,
     POW_FAST = 0,
     POW_LONG = 1,
-    POW_SHORT = 2
+    POW_SHORT = 2,
+    POW_THROUGH  = 3
 };
 
 class Powerup : public Base {

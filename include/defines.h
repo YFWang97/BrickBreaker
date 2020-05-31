@@ -44,7 +44,7 @@ typedef struct bound {
 #define BRICK_HEIGHT 20
 #define BRICK_WIDTH 60
 
-#define BRICK_ROW 15
+#define BRICK_ROW 8
 #define BRICK_COL 15
 
 #define BRICK_MARGIN ((SCREEN_WIDTH - (BRICK_COL * BRICK_WIDTH)) / 2)

@@ -79,6 +79,9 @@ int initialize_img() {
     powerupTexture[2] = load_img("img/power0.png");
     if (powerupTexture[2] == NULL) {return -1;}
 
+    powerupTexture[3] = load_img("img/power0.png");
+    if (powerupTexture[3] == NULL) {return -1;}
+
     return 0;
 }
 

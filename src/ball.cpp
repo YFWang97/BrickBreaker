@@ -18,8 +18,8 @@ BallSpeed Ball::get_speed() {return speed;}
 int Ball::get_radius() {return (int)radius;}
 
 void Ball::set_speed(BallSpeed speed_) {
-    speedX *= (speed_ / speed);
-    speedY *= (speed_ / speed);
+    //speedX *= (speed_ / speed);
+    //speedY *= (speed_ / speed);
     speed = speed_;
 }
 
@@ -42,6 +42,7 @@ void Ball::reset() {
     radius = R_NORMAL;
     speed = S_NORMAL;
     fired = 0;
+    throughBall = false;
 }
 
 void Ball::update_pos() {

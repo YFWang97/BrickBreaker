@@ -6,6 +6,7 @@
             "-w",
             "-Wall",
             "-O",
+            "-pg",
             "-Iinclude/",
             "-o",
             "game",
@@ -21,13 +22,14 @@
             "-w",
             "-Wall",
             "-O",
+            "-pg",
             "-Iinclude/",
             "-o",
             "game",
-            "src/base.cpp"
+            "src/powerup.cpp"
         ],
         "directory": "/home/yangfan/Projects/BrickBreaker",
-        "file": "src/base.cpp"
+        "file": "src/powerup.cpp"
     },
     {
         "arguments": [
@@ -36,6 +38,7 @@
             "-w",
             "-Wall",
             "-O",
+            "-pg",
             "-Iinclude/",
             "-o",
             "game",
@@ -51,6 +54,39 @@
             "-w",
             "-Wall",
             "-O",
+            "-pg",
+            "-Iinclude/",
+            "-o",
+            "game",
+            "src/brick.cpp"
+        ],
+        "directory": "/home/yangfan/Projects/BrickBreaker",
+        "file": "src/brick.cpp"
+    },
+    {
+        "arguments": [
+            "c++",
+            "-c",
+            "-w",
+            "-Wall",
+            "-O",
+            "-pg",
+            "-Iinclude/",
+            "-o",
+            "game",
+            "src/base.cpp"
+        ],
+        "directory": "/home/yangfan/Projects/BrickBreaker",
+        "file": "src/base.cpp"
+    },
+    {
+        "arguments": [
+            "c++",
+            "-c",
+            "-w",
+            "-Wall",
+            "-O",
+            "-pg",
             "-Iinclude/",
             "-o",
             "game",
@@ -66,6 +102,7 @@
             "-w",
             "-Wall",
             "-O",
+            "-pg",
             "-Iinclude/",
             "-o",
             "game",
